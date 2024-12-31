@@ -4,6 +4,7 @@ CREATE TABLE IF NOT EXISTS writers (
     firstName VARCHAR(255) NOT NULL,
     lastName VARCHAR(255) NOT NULL,
     writer_status VARCHAR(100) NOT NULL
+
 );
 
 
@@ -11,6 +12,7 @@ CREATE TABLE IF NOT EXISTS labels (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
     label_status VARCHAR(100) NOT NULL
+
 );
 
 
@@ -46,4 +48,4 @@ SELECT p.id, p.content, p.created, p.updated, p.post_status,
             left join post_labels pl on p.id = pl.post_id left join labels l on pl.label_id = l.id
             left join writers w on w.id = p.writer_id
 
-
+select *from writers

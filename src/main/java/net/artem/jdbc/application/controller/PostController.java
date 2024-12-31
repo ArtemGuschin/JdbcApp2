@@ -1,10 +1,11 @@
-package net.artem.javacore.jdbc.application.controller;
+package net.artem.jdbc.application.controller;
 
-import net.artem.javacore.jdbc.application.enums.PostStatus;
-import net.artem.javacore.jdbc.application.model.Label;
-import net.artem.javacore.jdbc.application.model.Post;
-import net.artem.javacore.jdbc.application.repository.jdbc.JdbcPostRepositoryImpl;
-import net.artem.javacore.jdbc.application.repository.PostRepository;
+import net.artem.jdbc.application.enums.PostStatus;
+import net.artem.jdbc.application.model.Label;
+import net.artem.jdbc.application.model.Post;
+import net.artem.jdbc.application.model.Writer;
+import net.artem.jdbc.application.repository.jdbc.JdbcPostRepositoryImpl;
+import net.artem.jdbc.application.repository.PostRepository;
 
 import java.util.Date;
 import java.util.List;
@@ -33,16 +34,16 @@ public class PostController {
     }
 
 
-    public Post updatePost(Long id, String content,
-                           List<Label> labels,
-                           Date updated, Date date) {
-        Post updatePost = Post.builder()
+    public Post updatePost(Long id, String content, PostStatus postStatus, List<Label> labels, Date created, Date updated, Writer writer) {
+        Post post = Post.builder()
                 .id(id)
                 .content(content)
+                .postStatus(postStatus)
                 .labels(labels)
-                .updated(updated)
+                .created(created)
+                .updated(new Date())
                 .build();
-        return postRepository.update(updatePost);
+        return postRepository.update(post);
     }
 
     public void deletePost(Long id) {

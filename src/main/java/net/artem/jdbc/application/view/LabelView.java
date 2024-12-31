@@ -1,10 +1,11 @@
-package net.artem.javacore.jdbc.application.view;
+package net.artem.jdbc.application.view;
 
-import net.artem.javacore.jdbc.application.controller.LabelController;
-import net.artem.javacore.jdbc.application.enums.LabelStatus;
-import net.artem.javacore.jdbc.application.model.Label;
+import net.artem.jdbc.application.controller.LabelController;
+import net.artem.jdbc.application.enums.LabelStatus;
+import net.artem.jdbc.application.model.Label;
 
 import java.sql.SQLException;
+import java.util.List;
 import java.util.Scanner;
 
 public class LabelView {
@@ -71,6 +72,12 @@ public class LabelView {
         System.out.println("Label deleted");
     }
 
+    private void getAllLabels() {
+        List<Label> labels = labelController.getAll();
+        for (Label label : labels) {
+            System.out.println(label);
+        }
+    }
 
 
 }

@@ -1,8 +1,8 @@
-package net.artem.javacore.jdbc.application.model;
+package net.artem.jdbc.application.model;
 
 import lombok.*;
 
-import net.artem.javacore.jdbc.application.enums.LabelStatus;
+import net.artem.jdbc.application.enums.LabelStatus;
 
 
 @Data

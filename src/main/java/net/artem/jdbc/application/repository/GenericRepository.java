@@ -1,4 +1,4 @@
-package net.artem.javacore.jdbc.application.repository;
+package net.artem.jdbc.application.repository;
 
 import java.util.List;
 

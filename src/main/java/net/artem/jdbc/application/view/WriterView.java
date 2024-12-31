@@ -1,10 +1,10 @@
-package net.artem.javacore.jdbc.application.view;
+package net.artem.jdbc.application.view;
 
-import net.artem.javacore.jdbc.application.controller.PostController;
-import net.artem.javacore.jdbc.application.controller.WriterController;
-import net.artem.javacore.jdbc.application.enums.WriterStatus;
-import net.artem.javacore.jdbc.application.model.Post;
-import net.artem.javacore.jdbc.application.model.Writer;
+import net.artem.jdbc.application.controller.PostController;
+import net.artem.jdbc.application.controller.WriterController;
+import net.artem.jdbc.application.enums.WriterStatus;
+import net.artem.jdbc.application.model.Post;
+import net.artem.jdbc.application.model.Writer;
 
 import java.util.ArrayList;
 import java.util.List;

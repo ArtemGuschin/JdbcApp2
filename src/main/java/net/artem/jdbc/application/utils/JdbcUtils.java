@@ -1,4 +1,4 @@
-package net.artem.javacore.jdbc.application.utils;
+package net.artem.jdbc.application.utils;
 
 import java.nio.file.Files;
 import java.nio.file.Paths;

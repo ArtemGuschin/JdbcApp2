@@ -1,16 +1,18 @@
-package net.artem.javacore.jdbc.application.repository.jdbc;
+package net.artem.jdbc.application.repository.jdbc;
 
-import net.artem.javacore.jdbc.application.enums.WriterStatus;
-import net.artem.javacore.jdbc.application.model.Label;
-import net.artem.javacore.jdbc.application.model.Post;
-import net.artem.javacore.jdbc.application.model.Writer;
-import net.artem.javacore.jdbc.application.repository.WriterRepository;
-import net.artem.javacore.jdbc.application.utils.JdbcUtils;
+import lombok.SneakyThrows;
+import net.artem.jdbc.application.enums.WriterStatus;
+import net.artem.jdbc.application.model.Label;
+import net.artem.jdbc.application.model.Post;
+import net.artem.jdbc.application.model.Writer;
+import net.artem.jdbc.application.repository.WriterRepository;
+import net.artem.jdbc.application.utils.JdbcUtils;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class JdbcWriterRepositoryImpl implements WriterRepository {
@@ -27,47 +29,119 @@ public class JdbcWriterRepositoryImpl implements WriterRepository {
         List<Writer> writers = new ArrayList<>();
 
 
-        try (PreparedStatement preparedStatement = JdbcUtils.getPreparedStatement(GET_WRITER_BY_ID_SQL) ) {
+        try (PreparedStatement preparedStatement = JdbcUtils.getPreparedStatement(GET_WRITER_BY_ID_SQL)) {
             preparedStatement.setLong(1, id);
             ResultSet resultSet = preparedStatement.executeQuery();
+            List<Post> posts = new ArrayList<>();
+            while (resultSet.next()) {
 
-            Long writerId = resultSet.getLong(1);
-            String firstName = resultSet.getString(2);
-            String lastName = resultSet.getString(3);
+                Long writerId = resultSet.getLong(1);
+                String firstName = resultSet.getString(2);
+                String lastName = resultSet.getString(3);
 
-            WriterStatus writerStatus = WriterStatus.valueOf(resultSet.getString(5));
 
-            return Writer.builder()
-                    .id(writerId)
-                    .firstName(firstName)
-                    .lastName(lastName)
+                WriterStatus writerStatus = WriterStatus.valueOf(resultSet.getString(5));
 
-                    .writerStatus(writerStatus)
-                    .build();
+                return Writer.builder()
+                        .id(writerId)
+                        .firstName(firstName)
+                        .lastName(lastName)
+
+                        .writerStatus(writerStatus)
+                        .build();
+            }
 
         } catch (SQLException e) {
             return null;
         }
-
+        return null;
     }
 
+    @SneakyThrows
     @Override
     public List<Writer> getAll() {
-        return null;
+        List<Writer> writers = new ArrayList<>();
+        try (PreparedStatement preparedStatement = JdbcUtils.getPreparedStatement(SELECT_ALL_SQL)) {
+            ResultSet resultSet = preparedStatement.executeQuery();
+            List<Post> posts = new ArrayList<>();
+
+            while (resultSet.next()) {
+                Long id = resultSet.getLong(1);
+                String firstName = resultSet.getString(2);
+                String lastName = resultSet.getString(3);
+                WriterStatus writerStatus = WriterStatus.valueOf(resultSet.getString(4));
+
+                return Collections.singletonList(Writer.builder()
+                        .id(id)
+                        .firstName(firstName)
+                        .lastName(lastName)
+                        .writerStatus(writerStatus)
+                        .build());
+            }
+
+        }
+
+
+        return writers;
     }
 
+    @SneakyThrows
     @Override
     public Writer save(Writer writer) {
-        return null;
+
+        try (PreparedStatement preparedStatement = JdbcUtils.getPreparedStatementWithKey(INSERT_SQL)) {
+            preparedStatement.setLong(1, writer.getId());
+            preparedStatement.setString(2, writer.getFirstName());
+            preparedStatement.setString(3, writer.getLastName());
+            preparedStatement.setString(4, writer.getWriterStatus().name());
+
+            preparedStatement.executeUpdate();
+            ResultSet generatedKeys = preparedStatement.getGeneratedKeys();
+            if (generatedKeys.next()) {
+                writer.setId(generatedKeys.getLong(1));
+            } else {
+                throw new RuntimeException("Создание не удалось");
+
+            }
+
+            return writer;
+        }
+
+
     }
 
+    @SneakyThrows
     @Override
-    public Writer update(Writer writer) {
-        return null;
+    public Writer update(Writer updateWriter) {
+        try (PreparedStatement preparedStatement = JdbcUtils.getPreparedStatement(UPDATE_SQL)) {
+        preparedStatement.setString(1,updateWriter.getFirstName());
+        preparedStatement.setString(2,updateWriter.getLastName());
+        preparedStatement.setString(3,updateWriter.getWriterStatus().name());
+
+            int affectedRows = preparedStatement.executeUpdate();
+
+            if (affectedRows == 0){
+                throw  new RuntimeException("Обновление Writer неудалось");
+            }
+        }
+
+
+        return updateWriter;
     }
 
+    @SneakyThrows
     @Override
     public void deleteById(Long id) {
+
+        try (PreparedStatement preparedStatement = JdbcUtils.getPreparedStatementWithKey(DELETE_BY_ID_SQL)){
+            preparedStatement.setString(1,WriterStatus.DELETED.name());
+            preparedStatement.setLong(2,id);
+
+            int affectedRows = preparedStatement.executeUpdate();
+            if (affectedRows == 0){
+                throw  new RuntimeException("Не удалось удалить");
+            }
+        }
 
     }
 }

@@ -1,4 +1,4 @@
-package net.artem.javacore.jdbc.application.view;
+package net.artem.jdbc.application.view;
 
 import java.util.Scanner;
 

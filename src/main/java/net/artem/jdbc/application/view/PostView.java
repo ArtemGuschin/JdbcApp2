@@ -1,10 +1,10 @@
-package net.artem.javacore.jdbc.application.view;
+package net.artem.jdbc.application.view;
 
-import net.artem.javacore.jdbc.application.controller.LabelController;
-import net.artem.javacore.jdbc.application.controller.PostController;
-import net.artem.javacore.jdbc.application.enums.PostStatus;
-import net.artem.javacore.jdbc.application.model.Label;
-import net.artem.javacore.jdbc.application.model.Post;
+import net.artem.jdbc.application.controller.LabelController;
+import net.artem.jdbc.application.controller.PostController;
+import net.artem.jdbc.application.enums.PostStatus;
+import net.artem.jdbc.application.model.Label;
+import net.artem.jdbc.application.model.Post;
 
 import java.util.*;
 
@@ -52,7 +52,7 @@ public class PostView {
         String content = SCANNER.nextLine();
         PostStatus postStatus = PostStatus.UNDER_REVIEW;
         List<Label> labels = fulfillsLabels();
-     //   Post updatedPost = postController.updatePost(id, content, postStatus, labels, new Date(), new Date());
+
 
 
     }

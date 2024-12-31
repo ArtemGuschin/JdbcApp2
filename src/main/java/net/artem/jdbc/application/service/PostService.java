@@ -1,11 +1,11 @@
-package net.artem.javacore.jdbc.application.service;
+package net.artem.jdbc.application.service;
 
-import net.artem.javacore.jdbc.application.enums.LabelStatus;
-import net.artem.javacore.jdbc.application.enums.PostStatus;
-import net.artem.javacore.jdbc.application.model.Label;
-import net.artem.javacore.jdbc.application.model.Post;
-import net.artem.javacore.jdbc.application.repository.PostRepository;
-import net.artem.javacore.jdbc.application.repository.jdbc.JdbcPostRepositoryImpl;
+import net.artem.jdbc.application.enums.LabelStatus;
+import net.artem.jdbc.application.enums.PostStatus;
+import net.artem.jdbc.application.model.Label;
+import net.artem.jdbc.application.model.Post;
+import net.artem.jdbc.application.repository.PostRepository;
+import net.artem.jdbc.application.repository.jdbc.JdbcPostRepositoryImpl;
 
 public class PostService {
     private final PostRepository postRepository;

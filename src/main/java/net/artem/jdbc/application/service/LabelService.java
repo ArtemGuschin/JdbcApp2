@@ -1,9 +1,9 @@
-package net.artem.javacore.jdbc.application.service;
+package net.artem.jdbc.application.service;
 
-import net.artem.javacore.jdbc.application.enums.LabelStatus;
-import net.artem.javacore.jdbc.application.model.Label;
-import net.artem.javacore.jdbc.application.repository.LabelRepository;
-import net.artem.javacore.jdbc.application.repository.jdbc.JdbcLabelRepositoryImpl;
+import net.artem.jdbc.application.enums.LabelStatus;
+import net.artem.jdbc.application.model.Label;
+import net.artem.jdbc.application.repository.LabelRepository;
+import net.artem.jdbc.application.repository.jdbc.JdbcLabelRepositoryImpl;
 
 import java.util.List;
 

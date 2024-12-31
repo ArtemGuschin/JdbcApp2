@@ -1,8 +1,10 @@
-package net.artem.javacore.jdbc.application.controller;
+package net.artem.jdbc.application.controller;
 
-import net.artem.javacore.jdbc.application.model.Label;
-import net.artem.javacore.jdbc.application.service.LabelService;
+import net.artem.jdbc.application.model.Label;
+import net.artem.jdbc.application.service.LabelService;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.List;
 
 public class LabelController {
@@ -21,14 +23,13 @@ public class LabelController {
         return labelService.createLabel(label);
     }
 
-    public Label updateLabel( Long id,String name) {
-        Label updateLabel = new Label(id,name);
+    public Label updateLabel(Long id, String name) {
+        Label updateLabel = new Label(id, name);
         updateLabel.setId(id);
         updateLabel.setName(name);
         return labelService.updateLabel(updateLabel);
 
     }
-
 
 
     public void deleteLabel(Long id) {
@@ -41,3 +42,6 @@ public class LabelController {
         return labelService.getAll();
     }
 }
+
+
+

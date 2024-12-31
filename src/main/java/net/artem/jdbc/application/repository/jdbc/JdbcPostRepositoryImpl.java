@@ -1,40 +1,40 @@
-package net.artem.javacore.jdbc.application.repository.jdbc;
+package net.artem.jdbc.application.repository.jdbc;
 
 import lombok.SneakyThrows;
-import net.artem.javacore.jdbc.application.enums.LabelStatus;
-import net.artem.javacore.jdbc.application.enums.PostStatus;
-import net.artem.javacore.jdbc.application.model.Label;
-import net.artem.javacore.jdbc.application.model.Post;
-import net.artem.javacore.jdbc.application.model.Writer;
-import net.artem.javacore.jdbc.application.repository.PostRepository;
-import net.artem.javacore.jdbc.application.utils.JdbcUtils;
+import net.artem.jdbc.application.enums.LabelStatus;
+import net.artem.jdbc.application.enums.PostStatus;
+import net.artem.jdbc.application.model.Label;
+import net.artem.jdbc.application.model.Post;
+import net.artem.jdbc.application.model.Writer;
+import net.artem.jdbc.application.repository.PostRepository;
+import net.artem.jdbc.application.utils.JdbcUtils;
 
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Timestamp;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
 public class JdbcPostRepositoryImpl implements PostRepository {
+
+
+
     private static final String GET_POST_bY_ID_SQL = """
-            SELECT p.id, p.content, p.created, p.updated, p.post_status, 
+            SELECT p.id, p.content, p.created, p.updated, p.post_status,
               w.id as writer_id, w.firstname, w.lastname, l.id as label_id, l.name
-              from posts p 
-              left join post_labels pl on p.id = pl.post_id 
-              left join labels l on pl.label_id = l.id 
-              left join writers w on w.id = p.writer_id 
+              from posts p
+              left join post_labels pl on p.id = pl.post_id
+              left join labels l on pl.label_id = l.id
+              left join writers w on w.id = p.writer_id
               where p.id = ? """;
 
 
     private static final String SELECT_ALL_SQL = """
-            SELECT p.id, p.content, p.created, p.updated, p.post_status, 
-            w.id as writer_id, w.firstname, w.lastname, l.id as label_id, l.name 
-            from posts p 
-            left join post_labels pl on p.id = pl.post_id left join labels l on pl.label_id = l.id 
-            left join writers w on w.id = p.writer_id 
+            SELECT p.id, p.content, p.created, p.updated, p.post_status,
+            w.id as writer_id, w.firstname, w.lastname, l.id as label_id, l.name
+            from posts p
+            left join post_labels pl on p.id = pl.post_id left join labels l on pl.label_id = l.id
+            left join writers w on w.id = p.writer_id
             """;
 
     private static final String INSERT_SQL = "INSERT INTO posts (content, created, updated, post_status, writer_id) VALUES (?, ?, ?, ?, ?)";
@@ -66,21 +66,23 @@ public class JdbcPostRepositoryImpl implements PostRepository {
                 writer.setFirstName(resultSet.getString(7));
                 writer.setLastName(resultSet.getString(8));
 
+                    while (resultSet.next()) {
+                        Label label = new Label();
+                        label.setId(resultSet.getLong(9));
+                        label.setName(resultSet.getString(10));
 
-                Label label = new Label();
-                label.setId(resultSet.getLong(9));
-                label.setName(resultSet.getString(10));
+                        labels.add(label);
+                    }
 
-                labels.add(label);
+                        return Post.builder()
+                                .id(postId)
+                                .content(content)
+                                .created(created)
+                                .updated(updated)
+                                .writer(writer)
+                                .labels(labels)
+                                .build();
 
-                return Post.builder()
-                        .id(postId)
-                        .content(content)
-                        .created(created)
-                        .updated(updated)
-                        .writer(writer)
-                        .labels(labels)
-                        .build();
             }
 
         } catch (SQLException e) {
