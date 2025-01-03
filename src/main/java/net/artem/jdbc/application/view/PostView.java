@@ -54,8 +54,8 @@ public class PostView {
         List<Label> labels = fulfillsLabels();
 
 
-
     }
+
     private void deletePost() {
         System.out.println("Enter id to delete :");
         Long id = SCANNER.nextLong();

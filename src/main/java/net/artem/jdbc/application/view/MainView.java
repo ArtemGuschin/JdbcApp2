@@ -15,6 +15,7 @@ public class MainView {
             System.out.println("Enter 2 to work for Posts");
             System.out.println("Enter 3 to work for Writers");
             System.out.println("Enter 0 for exit");
+            System.out.println("===========================");
 
             int userChoice = SCANNER.nextInt();
 

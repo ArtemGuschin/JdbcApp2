@@ -18,7 +18,6 @@ import java.util.List;
 public class JdbcPostRepositoryImpl implements PostRepository {
 
 
-
     private static final String GET_POST_bY_ID_SQL = """
             SELECT p.id, p.content, p.created, p.updated, p.post_status,
               w.id as writer_id, w.firstname, w.lastname, l.id as label_id, l.name
@@ -66,22 +65,22 @@ public class JdbcPostRepositoryImpl implements PostRepository {
                 writer.setFirstName(resultSet.getString(7));
                 writer.setLastName(resultSet.getString(8));
 
-                    while (resultSet.next()) {
-                        Label label = new Label();
-                        label.setId(resultSet.getLong(9));
-                        label.setName(resultSet.getString(10));
+                while (resultSet.next()) {
+                    Label label = new Label();
+                    label.setId(resultSet.getLong(9));
+                    label.setName(resultSet.getString(10));
 
-                        labels.add(label);
-                    }
+                    labels.add(label);
+                }
 
-                        return Post.builder()
-                                .id(postId)
-                                .content(content)
-                                .created(created)
-                                .updated(updated)
-                                .writer(writer)
-                                .labels(labels)
-                                .build();
+                return Post.builder()
+                        .id(postId)
+                        .content(content)
+                        .created(created)
+                        .updated(updated)
+                        .writer(writer)
+                        .labels(labels)
+                        .build();
 
             }
 

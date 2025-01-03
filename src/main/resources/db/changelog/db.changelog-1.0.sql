@@ -1,0 +1,37 @@
+--changeset artem: 1
+CREATE TABLE IF NOT EXISTS writers (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    firstName VARCHAR(255) NOT NULL,
+    lastName VARCHAR(255) NOT NULL,
+    writer_status VARCHAR(100) NOT NULL
+
+);
+
+
+CREATE TABLE IF NOT EXISTS labels (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    label_status VARCHAR(100) NOT NULL
+
+);
+select * from  labels
+
+
+CREATE TABLE IF NOT EXISTS posts (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    content TEXT NOT NULL,
+    created TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    writer_id BIGINT,
+    post_status VARCHAR(100) NOT NULL,
+     FOREIGN KEY (writer_id) REFERENCES writers(id) ON DELETE CASCADE
+);
+
+
+CREATE TABLE IF NOT EXISTS post_labels (
+    post_id BIGINT,
+    label_id BIGINT,
+    PRIMARY KEY (post_id, label_id),
+    FOREIGN KEY (post_id) REFERENCES posts(id) ON DELETE CASCADE,
+    FOREIGN KEY (label_id) REFERENCES labels(id) ON DELETE CASCADE
+);

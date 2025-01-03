@@ -5,11 +5,12 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>net.artem.javacore.jdbc.application</groupId>
-    <artifactId>JdbcApp</artifactId>
+    <artifactId>JdbcApp2</artifactId>
     <version>1.0.0</version>
 
     <properties>
         <liquebase.version>4.24.0</liquebase.version>
+<!--        <liquebase.version>4.24.0</liquebase.version>-->
         <lombok.version>1.18.30</lombok.version>
         <mockito.version>5.12.0</mockito.version>
         <mysql.version>8.0.33</mysql.version>
@@ -41,13 +42,27 @@
             <version>${lombok.version}</version>
             <scope>provided</scope>
         </dependency>
-
-
-
-
-
-
-
     </dependencies>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.liquibase</groupId>
+                <artifactId>liquibase-maven-plugin</artifactId>
+                <version>${liquebase.version}</version>
+                <executions>
+                    <execution>
+                        <phase>process-resources</phase>
+                        <configuration>
+                            <propertyFile>src/main/resources/db/changelog/db.changelog-master.yml</propertyFile>
+                        </configuration>
+                        <goals>
+                            <goal>update</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
 
 </project>
