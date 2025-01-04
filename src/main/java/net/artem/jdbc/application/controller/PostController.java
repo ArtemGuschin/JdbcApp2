@@ -1,26 +1,20 @@
 package net.artem.jdbc.application.controller;
 
-import net.artem.jdbc.application.enums.PostStatus;
 import net.artem.jdbc.application.model.Label;
 import net.artem.jdbc.application.model.Post;
 import net.artem.jdbc.application.model.Writer;
-import net.artem.jdbc.application.repository.jdbc.JdbcPostRepositoryImpl;
-import net.artem.jdbc.application.repository.PostRepository;
+import net.artem.jdbc.application.service.PostService;
 
 import java.util.Date;
 import java.util.List;
 
 public class PostController {
-    private final PostRepository postRepository;
+    private final PostService postService;
 
-
-    public PostController() {
-        this.postRepository = new JdbcPostRepositoryImpl();
+    public PostController(PostService postService) {
+        this.postService = new PostService();
     }
 
-    public PostController(PostRepository postRepository) {
-        this.postRepository = postRepository;
-    }
 
     public Post createPost(String content, List<Label> labels) {
         Post newPost = Post.builder()
@@ -29,29 +23,29 @@ public class PostController {
                 .created(new Date())
                 .updated(new Date())
                 .build();
-        return postRepository.save(newPost);
+        return postService.createPost(newPost);
 
     }
 
 
-    public Post updatePost(Long id, String content, PostStatus postStatus, List<Label> labels, Date created, Date updated, Writer writer) {
+    public Post updatePost(Long id, String content, List<Label> labels, Date created, Date updated, Writer writer) {
         Post post = Post.builder()
                 .id(id)
                 .content(content)
-                .postStatus(postStatus)
                 .labels(labels)
                 .created(created)
                 .updated(new Date())
                 .build();
-        return postRepository.update(post);
+        return postService.updatePost(post);
     }
 
     public void deletePost(Long id) {
-        postRepository.deleteById(id);
+        Post deletePost = new Post();
+        postService.deletePost(deletePost);
     }
 
 
     public List<Post> getAll() {
-        return postRepository.getAll();
+        return postService.getAll();
     }
 }

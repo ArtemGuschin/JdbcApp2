@@ -90,7 +90,6 @@ public class JdbcWriterRepositoryImpl implements WriterRepository {
     public Writer save(Writer writer) {
 
         try (PreparedStatement preparedStatement = JdbcUtils.getPreparedStatementWithKey(INSERT_SQL)) {
-            preparedStatement.setLong(1, writer.getId());
             preparedStatement.setString(2, writer.getFirstName());
             preparedStatement.setString(3, writer.getLastName());
             preparedStatement.setString(4, writer.getWriterStatus().name());

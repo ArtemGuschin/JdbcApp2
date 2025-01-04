@@ -7,6 +7,8 @@ import net.artem.jdbc.application.model.Post;
 import net.artem.jdbc.application.repository.PostRepository;
 import net.artem.jdbc.application.repository.jdbc.JdbcPostRepositoryImpl;
 
+import java.util.List;
+
 public class PostService {
     private final PostRepository postRepository;
 
@@ -33,4 +35,8 @@ public class PostService {
 
     }
 
+
+    public List<Post> getAll() {
+        return postRepository.getAll();
+    }
 }

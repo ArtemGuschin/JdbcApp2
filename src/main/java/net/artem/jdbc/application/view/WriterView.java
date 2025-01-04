@@ -5,6 +5,8 @@ import net.artem.jdbc.application.controller.WriterController;
 import net.artem.jdbc.application.enums.WriterStatus;
 import net.artem.jdbc.application.model.Post;
 import net.artem.jdbc.application.model.Writer;
+import net.artem.jdbc.application.service.PostService;
+import net.artem.jdbc.application.service.WriterService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,8 +15,11 @@ import java.util.Scanner;
 
 public class WriterView {
     private final Scanner SCANNER = new Scanner(System.in);
-    private final WriterController writerController = new WriterController();
-    private final PostController postController = new PostController();
+    private WriterService writerService;
+    private  PostService postService ;
+    private final WriterController writerController = new WriterController(writerService);
+    private final PostController postController = new PostController(postService);
+
 
 
     private void createWriter() {

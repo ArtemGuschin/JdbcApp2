@@ -5,12 +5,14 @@ import net.artem.jdbc.application.controller.PostController;
 import net.artem.jdbc.application.enums.PostStatus;
 import net.artem.jdbc.application.model.Label;
 import net.artem.jdbc.application.model.Post;
+import net.artem.jdbc.application.service.PostService;
 
 import java.util.*;
 
 public class PostView {
     private final Scanner SCANNER = new Scanner(System.in);
-    private final PostController postController = new PostController();
+    private PostService postService = new PostService();
+    private final PostController postController = new PostController(postService);
     private final LabelController labelController = new LabelController();
 
 

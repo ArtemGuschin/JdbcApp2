@@ -1,5 +1,6 @@
 package net.artem.jdbc.application.repository.jdbc;
 
+import lombok.SneakyThrows;
 import net.artem.jdbc.application.enums.LabelStatus;
 import net.artem.jdbc.application.model.Label;
 import net.artem.jdbc.application.repository.LabelRepository;
@@ -108,7 +109,7 @@ public class JdbcLabelRepositoryImpl implements LabelRepository {
         return label;
     }
 
-
+    @SneakyThrows
     @Override
     public void deleteById(Long id) {
         try (PreparedStatement preparedStatement = JdbcUtils.getPreparedStatementWithKey(DELETE_BY_ID_SQL)) {
@@ -119,9 +120,6 @@ public class JdbcLabelRepositoryImpl implements LabelRepository {
             if (affectedRows == 0) {
                 throw new RuntimeException("Обновление статуса ярлыка не удалось, затронуты ноль строк.");
             }
-        } catch (SQLException e) {
-
-            throw new RuntimeException(" Ошибка базы данных при обновлении статуса ярлыка с ID " + id, e);
         }
     }
 }

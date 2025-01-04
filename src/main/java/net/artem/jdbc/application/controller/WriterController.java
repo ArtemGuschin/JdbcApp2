@@ -3,24 +3,18 @@ package net.artem.jdbc.application.controller;
 import net.artem.jdbc.application.enums.WriterStatus;
 import net.artem.jdbc.application.model.Post;
 import net.artem.jdbc.application.model.Writer;
-import net.artem.jdbc.application.repository.jdbc.JdbcWriterRepositoryImpl;
-import net.artem.jdbc.application.repository.WriterRepository;
 import net.artem.jdbc.application.service.WriterService;
 
 import java.util.List;
 
 public class WriterController {
+    private final WriterService writerService;
 
-    private final WriterRepository writerRepository;
-
-    public WriterController() {
-        this.writerRepository = new JdbcWriterRepositoryImpl();
-
+    public WriterController(WriterService writerService) {
+        this.writerService = writerService;
     }
 
-    public WriterController(WriterRepository writerRepository) {
-        this.writerRepository = writerRepository;
-    }
+  
 
 
     public Writer createWriter(String firstName, String lastName, WriterStatus writerStatus) {
@@ -29,7 +23,7 @@ public class WriterController {
                 .lastName(lastName)
                 .writerStatus(writerStatus)
                 .build();
-        return writerRepository.save(writer);
+        return writerService.createWriter(writer);
     }
 
     public Writer updateWriter(Long id, String firstName, String lastName, List<Post> posts, WriterStatus writerStatus) {
@@ -41,14 +35,15 @@ public class WriterController {
                 .writerStatus(writerStatus)
                 .build();
 
-        return writerRepository.update(writer);
+        return writerService.updateWriter(writer);
     }
 
     public void deleteWriter(Long id) {
-        writerRepository.deleteById(id);
+        Writer writer = new Writer();
+        writerService.deleteWriter(writer);
     }
 
     public List<Writer> getAll() {
-        return writerRepository.getAll();
+        return writerService.getAll();
     }
 }
