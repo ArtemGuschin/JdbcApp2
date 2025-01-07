@@ -1,6 +1,8 @@
 package net.artem.jdbc.application.repository.jdbc;
 
 import lombok.SneakyThrows;
+import net.artem.jdbc.application.controller.PostController;
+import net.artem.jdbc.application.enums.PostStatus;
 import net.artem.jdbc.application.enums.WriterStatus;
 import net.artem.jdbc.application.model.Label;
 import net.artem.jdbc.application.model.Post;
@@ -23,6 +25,7 @@ public class JdbcWriterRepositoryImpl implements WriterRepository {
     private static final String UPDATE_SQL = "UPDATE writers SET firstname = ?, lastname = ?, writer_status = ? WHERE id = ?";
     private static final String DELETE_BY_ID_SQL = "UPDATE writers SET writer_status = ? WHERE id = ?";
 
+    @SneakyThrows
     @Override
     public Writer getById(Long id) {
 
@@ -39,22 +42,31 @@ public class JdbcWriterRepositoryImpl implements WriterRepository {
                 String firstName = resultSet.getString(2);
                 String lastName = resultSet.getString(3);
 
+//                while (resultSet.next()) {
+//                    Post post = new Post();
+//                    post.setId(resultSet.getLong(1));
+//                    post.setContent(resultSet.getString(2));
+//                    post.setCreated(resultSet.getDate(3));
+//                    post.setUpdated(resultSet.getDate(4));
+//                    post.setWriter(null);
+//                    post.setPostStatus(PostStatus.valueOf(resultSet.getString(6)));
+//                    posts.add(post);
+//
+//                }
 
-                WriterStatus writerStatus = WriterStatus.valueOf(resultSet.getString(5));
+
+                WriterStatus writerStatus = WriterStatus.valueOf(resultSet.getString(4));
 
                 return Writer.builder()
                         .id(writerId)
                         .firstName(firstName)
                         .lastName(lastName)
-
                         .writerStatus(writerStatus)
                         .build();
             }
 
-        } catch (SQLException e) {
-            return null;
         }
-        return null;
+        return (Writer) Collections.emptyList();
     }
 
     @SneakyThrows
@@ -71,7 +83,7 @@ public class JdbcWriterRepositoryImpl implements WriterRepository {
                 String lastName = resultSet.getString(3);
                 WriterStatus writerStatus = WriterStatus.valueOf(resultSet.getString(4));
 
-                return Collections.singletonList(Writer.builder()
+                writers.add(Writer.builder()
                         .id(id)
                         .firstName(firstName)
                         .lastName(lastName)
@@ -90,9 +102,9 @@ public class JdbcWriterRepositoryImpl implements WriterRepository {
     public Writer save(Writer writer) {
 
         try (PreparedStatement preparedStatement = JdbcUtils.getPreparedStatementWithKey(INSERT_SQL)) {
-            preparedStatement.setString(2, writer.getFirstName());
-            preparedStatement.setString(3, writer.getLastName());
-            preparedStatement.setString(4, writer.getWriterStatus().name());
+            preparedStatement.setString(1, writer.getFirstName());
+            preparedStatement.setString(2, writer.getLastName());
+            preparedStatement.setString(3, writer.getWriterStatus().name());
 
             preparedStatement.executeUpdate();
             ResultSet generatedKeys = preparedStatement.getGeneratedKeys();
@@ -113,14 +125,14 @@ public class JdbcWriterRepositoryImpl implements WriterRepository {
     @Override
     public Writer update(Writer updateWriter) {
         try (PreparedStatement preparedStatement = JdbcUtils.getPreparedStatement(UPDATE_SQL)) {
-        preparedStatement.setString(1,updateWriter.getFirstName());
-        preparedStatement.setString(2,updateWriter.getLastName());
-        preparedStatement.setString(3,updateWriter.getWriterStatus().name());
-
+            preparedStatement.setString(1, updateWriter.getFirstName());
+            preparedStatement.setString(2, updateWriter.getLastName());
+            preparedStatement.setString(3, updateWriter.getWriterStatus().name());
+            preparedStatement.setLong(4, updateWriter.getId());
             int affectedRows = preparedStatement.executeUpdate();
 
-            if (affectedRows == 0){
-                throw  new RuntimeException("Обновление Writer неудалось");
+            if (affectedRows == 0) {
+                throw new RuntimeException("Обновление Writer неудалось");
             }
         }
 
@@ -132,15 +144,16 @@ public class JdbcWriterRepositoryImpl implements WriterRepository {
     @Override
     public void deleteById(Long id) {
 
-        try (PreparedStatement preparedStatement = JdbcUtils.getPreparedStatementWithKey(DELETE_BY_ID_SQL)){
-            preparedStatement.setString(1,WriterStatus.DELETED.name());
-            preparedStatement.setLong(2,id);
+        try (PreparedStatement preparedStatement = JdbcUtils.getPreparedStatementWithKey(DELETE_BY_ID_SQL)) {
+            preparedStatement.setString(1, WriterStatus.DELETED.name());
+            preparedStatement.setLong(2, id);
 
             int affectedRows = preparedStatement.executeUpdate();
-            if (affectedRows == 0){
-                throw  new RuntimeException("Не удалось удалить");
+            if (affectedRows == 0) {
+                throw new RuntimeException("Не удалось удалить");
             }
         }
 
     }
+
 }

@@ -33,14 +33,18 @@ public class LabelController {
 
 
     public void deleteLabel(Long id) {
-        Label deleteLabel = new Label();
-        labelService.deleteLabel(deleteLabel);
+        labelService.deleteLabel(id);
     }
 
 
     public List<Label> getAll() {
         return labelService.getAll();
     }
+
+    public Label getLabelById(Long id){
+        return labelService.getLabelBYId(id);
+    }
+
 }
 
 

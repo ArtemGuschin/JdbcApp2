@@ -5,6 +5,7 @@ import net.artem.jdbc.application.controller.PostController;
 import net.artem.jdbc.application.enums.PostStatus;
 import net.artem.jdbc.application.model.Label;
 import net.artem.jdbc.application.model.Post;
+import net.artem.jdbc.application.model.Writer;
 import net.artem.jdbc.application.service.PostService;
 
 import java.util.*;
@@ -12,7 +13,7 @@ import java.util.*;
 public class PostView {
     private final Scanner SCANNER = new Scanner(System.in);
     private PostService postService = new PostService();
-    private final PostController postController = new PostController(postService);
+    private final PostController postController = new PostController();
     private final LabelController labelController = new LabelController();
 
 
@@ -47,6 +48,7 @@ public class PostView {
     }
 
     private void updatePost() {
+
         System.out.println("Enter id post to update ");
         Long id = SCANNER.nextLong();
         SCANNER.nextLine();
@@ -54,6 +56,8 @@ public class PostView {
         String content = SCANNER.nextLine();
         PostStatus postStatus = PostStatus.UNDER_REVIEW;
         List<Label> labels = fulfillsLabels();
+        Writer writer = new Writer();
+        Post updatedPost = postController.updatePost(id, content, labels, new Date(), new Date(), writer);
 
 
     }
@@ -71,6 +75,8 @@ public class PostView {
             System.out.println("1 -  create Post ");
             System.out.println("2 - update Post");
             System.out.println("3 - delete Post");
+            System.out.println("4 - Get all");
+            System.out.println("5 - Get post id");
             System.out.println("Press 0 for exit");
 
             int userChoice = SCANNER.nextInt();
@@ -88,10 +94,29 @@ public class PostView {
                 case 3:
                     deletePost();
                     break;
+                case 4:
+                    getAll();
+                    break;
+                case 5:
+                    getPostById();
+                    break;
+
                 default:
                     System.exit(0);
             }
         }
+    }
+
+    private void getAll() {
+        List<Post> posts = postService.getAll();
+        System.out.println(posts);
+    }
+
+    private void getPostById() {
+        System.out.println("Enter id post ");
+        Long id = SCANNER.nextLong();
+        Post post = postService.getPostBYId(id);
+        System.out.println(post);
     }
 
 

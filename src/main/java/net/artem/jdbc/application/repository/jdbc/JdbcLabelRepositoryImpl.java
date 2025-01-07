@@ -20,34 +20,36 @@ public class JdbcLabelRepositoryImpl implements LabelRepository {
     private static final String UPDATE_SQL = "UPDATE   labels SET name = ? , label_status =? WHERE id =?";
     private static final String DELETE_BY_ID_SQL = "UPDATE labels SET  label_status = ? WHERE id = ?";
 
-
+@SneakyThrows
     @Override
     public Label getById(Long id) {
         try (PreparedStatement preparedStatement = JdbcUtils.getPreparedStatement(GET_LABEL_bY_ID_SQL)) {
             preparedStatement.setLong(1, id);
             ResultSet resultSet = preparedStatement.executeQuery();
 
-            Long labelId = resultSet.getLong(1);
-            String name = resultSet.getString(2);
-            LabelStatus labelStatus = LabelStatus.valueOf(resultSet.getString(3));
+            while (resultSet.next()) {
+                Long labelId = resultSet.getLong(1);
+                String name = resultSet.getString(2);
+                LabelStatus labelStatus = LabelStatus.valueOf(resultSet.getString(3));
 
-            return Label.builder()
-                    .id(labelId)
-                    .name(name)
-                    .labelStatus(labelStatus)
-                    .build();
+                return Label.builder()
+                        .id(labelId)
+                        .name(name)
+                        .labelStatus(labelStatus)
+                        .build();
+            }
 
-        } catch (SQLException e) {
-            return null;
+
         }
+        return (Label) Collections.emptyList();
     }
 
     @Override
     public List<Label> getAll() {
         List<Label> labels = new ArrayList<>();
 
-        try (PreparedStatement preparedStatement = JdbcUtils.getPreparedStatement(SELECT_ALL_SQL);
-             ResultSet resultSet = preparedStatement.executeQuery()) {
+        try (PreparedStatement preparedStatement = JdbcUtils.getPreparedStatement(SELECT_ALL_SQL)) {
+            ResultSet resultSet = preparedStatement.executeQuery();
 
             while (resultSet.next()) {
                 Long labelId = resultSet.getLong(1);

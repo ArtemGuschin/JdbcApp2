@@ -12,12 +12,20 @@
   <component name="DBNavigator.Project.DatabaseBrowserManager">
     <autoscroll-to-editor value="false" />
     <autoscroll-from-editor value="true" />
-    <show-object-properties value="true" />
+    <show-object-properties value="false" />
     <loaded-nodes />
   </component>
   <component name="DBNavigator.Project.DatabaseConsoleManager">
     <connection id="8b803d9a-e469-4f24-ad0d-2f591f480e6a">
       <console name="Connection" type="STANDARD" schema="" session="Main" />
+      <console name="Connection 1" type="STANDARD" schema="jdbcapplication" session="Main"><![CDATA[SELECT p.id, p.content, p.created, p.updated, p.post_status,
+            w.id as writer_id, w.firstname, w.lastname, l.id , l.name 
+            from posts p
+            left join post_labels pl on p.id = pl.post_id left join labels l on pl.label_id = l.id
+            left join writers w on w.id = p.writer_id
+
+INSERT INTO writers (firstname, lastname, writer_status) VALUES ('leonid ',' Guschin ', 'ACTIVE')
+SELECT*FROM labels WHERE id =1]]></console>
     </connection>
   </component>
   <component name="DBNavigator.Project.DatabaseEditorStateManager">
@@ -29,6 +37,13 @@
   <component name="DBNavigator.Project.DatabaseSessionManager">
     <connection id="8b803d9a-e469-4f24-ad0d-2f591f480e6a" />
   </component>
+  <component name="DBNavigator.Project.DatasetFilterManager">
+    <filter-actions connection-id="8b803d9a-e469-4f24-ad0d-2f591f480e6a" dataset="jdbcapplication.writers" active-filter-id="27323300-97fa-49a9-8408-a204002adbec">
+      <filter id="27323300-97fa-49a9-8408-a204002adbec" name="Filter 1" temporary="false" custom-name="false" type="basic" join-type="AND">
+        <condition column="id" operator="=" value="" active="true" />
+      </filter>
+    </filter-actions>
+  </component>
   <component name="DBNavigator.Project.ExecutionManager">
     <retain-sticky-names value="false" />
   </component>
@@ -39,6 +54,9 @@
   <component name="DBNavigator.Project.ObjectQuickFilterManager">
     <last-used-operator value="EQUAL" />
     <filters />
+  </component>
+  <component name="DBNavigator.Project.ScriptExecutionManager" clear-outputs="true">
+    <recently-used-interfaces />
   </component>
   <component name="DBNavigator.Project.Settings">
     <connections>

@@ -65,6 +65,7 @@ public class JdbcPostRepositoryImpl implements PostRepository {
                 writer.setFirstName(resultSet.getString(7));
                 writer.setLastName(resultSet.getString(8));
 
+
                 while (resultSet.next()) {
                     Label label = new Label();
                     label.setId(resultSet.getLong(9));
@@ -116,6 +117,7 @@ public class JdbcPostRepositoryImpl implements PostRepository {
                     Label label = new Label();
                     label.setId(resultSet.getLong(9));
                     label.setName(resultSet.getString(10));
+
 
                     labels.add(label);
 

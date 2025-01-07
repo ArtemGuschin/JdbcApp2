@@ -14,8 +14,6 @@ public class WriterController {
         this.writerService = writerService;
     }
 
-  
-
 
     public Writer createWriter(String firstName, String lastName, WriterStatus writerStatus) {
         Writer writer = Writer.builder()
@@ -39,11 +37,15 @@ public class WriterController {
     }
 
     public void deleteWriter(Long id) {
-        Writer writer = new Writer();
-        writerService.deleteWriter(writer);
+        writerService.deleteWriter(id);
     }
 
     public List<Writer> getAll() {
         return writerService.getAll();
+    }
+
+    public Writer getWriterBYId(Long id) {
+        return writerService.getWriterById(id);
+
     }
 }

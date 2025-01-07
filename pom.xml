@@ -10,7 +10,7 @@
 
     <properties>
         <liquebase.version>4.24.0</liquebase.version>
-<!--        <liquebase.version>4.24.0</liquebase.version>-->
+        <liquebase.version>4.24.0</liquebase.version>
         <lombok.version>1.18.30</lombok.version>
         <mockito.version>5.12.0</mockito.version>
         <mysql.version>8.0.33</mysql.version>
@@ -53,7 +53,7 @@
                     <execution>
                         <phase>process-resources</phase>
                         <configuration>
-                            <propertyFile>src/main/resources/db/changelog/db.changelog-master.yml</propertyFile>
+                           <propertyFile>src/main/resources/db/changelog/db.changelog-master.yml</propertyFile>
                         </configuration>
                         <goals>
                             <goal>update</goal>

@@ -32,14 +32,16 @@ public class LabelService {
     }
 
 
+    public void deleteLabel(Long id) {
+        labelRepository.deleteById(id);
 
-    public Label deleteLabel(Label label) {
-        label.setLabelStatus(LabelStatus.DELETED);
-        return label;
     }
 
 
     public List<Label> getAll() {
         return labelRepository.getAll();
+    }
+    public Label getLabelBYId(Long id){
+        return labelRepository.getById(id);
     }
 }

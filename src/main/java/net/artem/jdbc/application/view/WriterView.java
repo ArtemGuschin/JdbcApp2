@@ -3,6 +3,7 @@ package net.artem.jdbc.application.view;
 import net.artem.jdbc.application.controller.PostController;
 import net.artem.jdbc.application.controller.WriterController;
 import net.artem.jdbc.application.enums.WriterStatus;
+import net.artem.jdbc.application.model.Label;
 import net.artem.jdbc.application.model.Post;
 import net.artem.jdbc.application.model.Writer;
 import net.artem.jdbc.application.service.PostService;
@@ -15,11 +16,10 @@ import java.util.Scanner;
 
 public class WriterView {
     private final Scanner SCANNER = new Scanner(System.in);
-    private WriterService writerService;
-    private  PostService postService ;
+    private WriterService writerService = new WriterService();
+    private PostService postService = new PostService();
     private final WriterController writerController = new WriterController(writerService);
-    private final PostController postController = new PostController(postService);
-
+    private final PostController postController = new PostController();
 
 
     private void createWriter() {
@@ -27,9 +27,9 @@ public class WriterView {
         String firstName = SCANNER.nextLine();
         System.out.println("Enter lastName: ");
         String lastName = SCANNER.nextLine();
-        List<Post> posts = new ArrayList<>();
         WriterStatus writerStatus = WriterStatus.ACTIVE;
-        System.out.println("Writer created ");
+        Writer creeatedWriter = writerController.createWriter(firstName, lastName, writerStatus);
+        System.out.println("Writer created " + creeatedWriter);
 
 
     }
@@ -78,12 +78,15 @@ public class WriterView {
             }
         }
     }
+
     public void startWriter() {
         while (true) {
             System.out.println("Hello I am firstApp!!!");
             System.out.println("1 -  create Writer ");
             System.out.println("2 - update Writer");
             System.out.println("3 - delete Writer");
+            System.out.println("4 - get all writers");
+            System.out.println("5 - Get id writer ");
             System.out.println("Press 0 for exit");
 
             int userChoice = SCANNER.nextInt();
@@ -102,9 +105,27 @@ public class WriterView {
                 case 3:
                     deleteWriter();
                     break;
+                case 4:
+                    getAll();
+                    break;
+                case 5:
+                    getWriterById();
+                    break;
                 default:
                     System.exit(0);
             }
         }
+    }
+
+    public void getAll() {
+        List<Writer> writers = writerService.getAll();
+        System.out.println(writers);
+    }
+
+    private void getWriterById() {
+        System.out.println("Enter id writer ");
+        Long id = SCANNER.nextLong();
+        Writer writer = writerService.getWriterById(id);
+        System.out.println(writer);
     }
 }

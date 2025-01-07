@@ -29,14 +29,19 @@ public class PostService {
         return postRepository.update(post);
 
     }
-    public Post deletePost(Post post){
-        post.setPostStatus(PostStatus.DELETED);
-        return post;
+    public void deletePost(Long id){
+        postRepository.deleteById(id);
+
 
     }
 
 
     public List<Post> getAll() {
         return postRepository.getAll();
+    }
+
+    public Post getPostBYId(Long id) {
+        return postRepository.getById(id);
+
     }
 }

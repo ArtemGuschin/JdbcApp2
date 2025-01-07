@@ -3,6 +3,7 @@ package net.artem.jdbc.application.view;
 import net.artem.jdbc.application.controller.LabelController;
 import net.artem.jdbc.application.enums.LabelStatus;
 import net.artem.jdbc.application.model.Label;
+import net.artem.jdbc.application.service.LabelService;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -11,6 +12,7 @@ import java.util.Scanner;
 public class LabelView {
 
     private final LabelController labelController = new LabelController();
+    private LabelService labelService = new LabelService();
     private final Scanner SCANNER = new Scanner(System.in);
 
     public void startLabel() {
@@ -19,6 +21,8 @@ public class LabelView {
             System.out.println("1 - create Label ");
             System.out.println("2 - update Label");
             System.out.println("3 - delete Label");
+            System.out.println("4 - Get all Labels");
+            System.out.println("5 - Get label id ");
             System.out.println("Press 0 for exit");
 
             int userChoice = SCANNER.nextInt();
@@ -36,6 +40,12 @@ public class LabelView {
                     break;
                 case 3:
                     deleteLabel();
+                    break;
+                case 4:
+                    getAllLabels();
+                    break;
+                case 5 :
+                    getLabelById();
                     break;
                 default:
                     System.exit(0);
@@ -73,11 +83,14 @@ public class LabelView {
     }
 
     private void getAllLabels() {
-        List<Label> labels = labelController.getAll();
-        for (Label label : labels) {
-            System.out.println(label);
-        }
+        List<Label> labels = labelService.getAll();
+        System.out.println(labels);
     }
 
-
+    private void getLabelById() {
+        System.out.println("Enter id label ");
+        Long id = SCANNER.nextLong();
+        Label label = labelService.getLabelBYId(id);
+        System.out.println(label);
+    }
 }
