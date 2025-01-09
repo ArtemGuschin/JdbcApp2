@@ -1,7 +1,9 @@
 package net.artem.jdbc.application.view;
 
+import net.artem.jdbc.application.controller.LabelController;
 import net.artem.jdbc.application.controller.PostController;
 import net.artem.jdbc.application.controller.WriterController;
+import net.artem.jdbc.application.enums.LabelStatus;
 import net.artem.jdbc.application.enums.WriterStatus;
 import net.artem.jdbc.application.model.Label;
 import net.artem.jdbc.application.model.Post;
@@ -20,19 +22,26 @@ public class WriterView {
     private PostService postService = new PostService();
     private final WriterController writerController = new WriterController(writerService);
     private final PostController postController = new PostController();
+    private final LabelController labelController = new LabelController();
 
 
-    private void createWriter() {
-        System.out.println("Enter firstName: ");
-        String firstName = SCANNER.nextLine();
-        System.out.println("Enter lastName: ");
-        String lastName = SCANNER.nextLine();
-        WriterStatus writerStatus = WriterStatus.ACTIVE;
-        Writer creeatedWriter = writerController.createWriter(firstName, lastName, writerStatus);
-        System.out.println("Writer created " + creeatedWriter);
+    private void createWriter(){
+        System.out.println("Введите имя: ");
+        String firstname = SCANNER.nextLine();
+        System.out.println("Введите фамилию: ");
+        String lastname = SCANNER.nextLine();
+        WriterStatus writerStatus = WriterStatus.UNDER_REVIEW;
+        System.out.println("Создание лейбла");
+        String name = SCANNER.nextLine();
+        LabelStatus labelStatus = LabelStatus.UNDER_REVIEW;
+        Label label = labelController.createLabel(name,labelStatus);
+        Writer createdWriter = writerController.createWriter(firstname,lastname,writerStatus);
+        System.out.println("Writer updated ");
 
 
     }
+
+
 
     private void updateWriter() {
         System.out.println("Enter  id Writer to update :");
@@ -42,7 +51,7 @@ public class WriterView {
         String firstName = SCANNER.nextLine();
         System.out.println("Enter LastName");
         String lastName = SCANNER.nextLine();
-        List<Post> posts = fulfillsPosts();
+        List<Post> posts = new ArrayList<>();
         WriterStatus writerStatus = WriterStatus.UNDER_REVIEW;
         Writer updatedWriter = writerController.updateWriter(id, firstName, lastName, posts, writerStatus);
         System.out.println("Writer updated ");

@@ -2,11 +2,13 @@ package net.artem.jdbc.application.view;
 
 import net.artem.jdbc.application.controller.LabelController;
 import net.artem.jdbc.application.controller.PostController;
+import net.artem.jdbc.application.controller.WriterController;
 import net.artem.jdbc.application.enums.PostStatus;
 import net.artem.jdbc.application.model.Label;
 import net.artem.jdbc.application.model.Post;
 import net.artem.jdbc.application.model.Writer;
 import net.artem.jdbc.application.service.PostService;
+import net.artem.jdbc.application.service.WriterService;
 
 import java.util.*;
 
@@ -15,17 +17,47 @@ public class PostView {
     private PostService postService = new PostService();
     private final PostController postController = new PostController();
     private final LabelController labelController = new LabelController();
+    private final WriterService writerService = new WriterService();
 
 
     private void createPost() {
         System.out.println("Enter post content ");
         String content = SCANNER.nextLine();
         PostStatus postStatus = PostStatus.ACTIVE;
-        List<Label> labels = fulfillsLabels();
-        Post createdPost = postController.createPost(content, labels);
+        System.out.println("Enter label id ");
+        Long id = SCANNER.nextLong();
+        Writer writer = writerService.getWriterById(id);
+
+        Post createdPost = postController.createPost(content,  id);
         System.out.println("Created post " + createdPost);
 
     }
+//private void createPost() {
+//    Writer writer = chooseWriter();
+//
+//    if (writer != null) {
+//        System.out.println("Введите содержание поста: ");
+//        String content = SCANNER.nextLine();
+//
+//      List<Post> labels = postService.getAll();
+//
+//        for (Post label : labels) {
+//            labelController.createLabel(String.valueOf(label));
+//        }
+//
+//        Post post = Post.builder()
+//                .content(content)
+//                .created(new Date())
+//                .updated(new Date())
+//                .postStatus(PostStatus.ACTIVE)
+//                .writer(writer)
+//                .labels(labels)
+//                .build();
+//
+//        postController.createPost(post);
+//        System.out.println("Пост сохранен.");
+//    }
+//}
 
     private List<Label> fulfillsLabels() {
         List<Label> result = new ArrayList<>();

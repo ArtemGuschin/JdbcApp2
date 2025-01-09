@@ -52,8 +52,18 @@
                 <executions>
                     <execution>
                         <phase>process-resources</phase>
+
                         <configuration>
-                           <propertyFile>src/main/resources/db/changelog/db.changelog-master.yml</propertyFile>
+<!--                            <verbose>true</verbose>-->
+<!--                            <driver>com.mysql.cj.jdbc.Driver</driver>-->
+<!--                            <url>jdbc:mysql://localhost/JdbcApplication</url>-->
+<!--                            <username>root</username>-->
+<!--                            <password>root</password>-->
+
+<!--                           <propertyFile>src/main/resources/db/changelog/db.changelog-master.yml</propertyFile>-->
+                            <propertyFile>src/main/resources/db/liquibase.properties</propertyFile>
+
+                         <changeLogFile>src/main/resources/db/changelog</changeLogFile>
                         </configuration>
                         <goals>
                             <goal>update</goal>

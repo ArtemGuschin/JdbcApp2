@@ -4,12 +4,7 @@ import net.artem.jdbc.application.model.Label;
 import net.artem.jdbc.application.model.Post;
 import net.artem.jdbc.application.model.Writer;
 import net.artem.jdbc.application.service.PostService;
-import net.artem.jdbc.application.utils.JdbcUtils;
 
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -52,6 +47,7 @@ public class PostController {
     public List<Post> getAll() {
         return postService.getAll();
     }
+
 
 
 }

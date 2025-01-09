@@ -142,6 +142,7 @@ public class JdbcPostRepositoryImpl implements PostRepository {
     @Override
     //content, created, updated, post_status, writer_id
     public Post save(Post post) {
+
         try (PreparedStatement preparedStatement = JdbcUtils.getPreparedStatementWithKey(INSERT_SQL)) {
             preparedStatement.setString(1, post.getContent());
             preparedStatement.setTimestamp(2, new Timestamp(post.getCreated().getTime()));
@@ -150,12 +151,17 @@ public class JdbcPostRepositoryImpl implements PostRepository {
             preparedStatement.setLong(5, post.getWriter().getId());
 
 
+
             preparedStatement.executeUpdate();
+
             ResultSet generatedKeys = preparedStatement.getGeneratedKeys();
             if (generatedKeys.next()) {
                 post.setId(generatedKeys.getLong(1));
             } else {
                 throw new RuntimeException("Создание не удалось");
+            }
+            if (post.getLabels() != null && !post.getLabels().isEmpty()) {
+                addLabelToPost(post.getId(), post.getLabels());
             }
             addLabelToPost(post.getId(), post.getLabels());
 
