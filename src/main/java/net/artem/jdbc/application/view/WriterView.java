@@ -30,12 +30,9 @@ public class WriterView {
         String firstname = SCANNER.nextLine();
         System.out.println("Введите фамилию: ");
         String lastname = SCANNER.nextLine();
+        List<Post>posts = postController.getAll();
         WriterStatus writerStatus = WriterStatus.UNDER_REVIEW;
-        System.out.println("Создание лейбла");
-        String name = SCANNER.nextLine();
-        LabelStatus labelStatus = LabelStatus.UNDER_REVIEW;
-        Label label = labelController.createLabel(name,labelStatus);
-        Writer createdWriter = writerController.createWriter(firstname,lastname,writerStatus);
+        Writer createdWriter = writerController.createWriter(firstname,lastname,posts,writerStatus);
         System.out.println("Writer updated ");
 
 

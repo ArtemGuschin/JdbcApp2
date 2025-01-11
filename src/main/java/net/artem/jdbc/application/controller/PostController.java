@@ -16,9 +16,10 @@ public class PostController {
     }
 
 
-    public Post createPost(String content, List<Label> labels) {
+    public Post createPost(String content,Writer writer, List<Label> labels) {
         Post newPost = Post.builder()
                 .content(content)
+                .writer(writer)
                 .labels(labels)
                 .created(new Date())
                 .updated(new Date())

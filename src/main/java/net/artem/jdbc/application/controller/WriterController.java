@@ -15,10 +15,11 @@ public class WriterController {
     }
 
 
-    public Writer createWriter(String firstName, String lastName, WriterStatus writerStatus) {
+    public Writer createWriter(String firstName, String lastName, List<Post> posts, WriterStatus writerStatus) {
         Writer writer = Writer.builder()
                 .firstName(firstName)
                 .lastName(lastName)
+                .posts(posts)
                 .writerStatus(writerStatus)
                 .build();
         return writerService.createWriter(writer);

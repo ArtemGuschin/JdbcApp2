@@ -10,17 +10,15 @@ import net.artem.jdbc.application.repository.PostRepository;
 import net.artem.jdbc.application.utils.JdbcUtils;
 
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.Collections;
+import java.util.*;
 import java.util.Date;
-import java.util.List;
 
 public class JdbcPostRepositoryImpl implements PostRepository {
 
 
     private static final String GET_POST_bY_ID_SQL = """
             SELECT p.id, p.content, p.created, p.updated, p.post_status,
-              w.id as writer_id, w.firstname, w.lastname, l.id as label_id, l.name
+              w.id as writer_id, w.firstname, w.lastname, l.id as label_id, l.name, l.label_status
               from posts p
               left join post_labels pl on p.id = pl.post_id
               left join labels l on pl.label_id = l.id
@@ -30,7 +28,7 @@ public class JdbcPostRepositoryImpl implements PostRepository {
 
     private static final String SELECT_ALL_SQL = """
             SELECT p.id, p.content, p.created, p.updated, p.post_status,
-            w.id as writer_id, w.firstname, w.lastname, l.id as label_id, l.name
+            w.id as writer_id, w.firstname, w.lastname, l.id as label_id, l.name, l.label_status
             from posts p
             left join post_labels pl on p.id = pl.post_id left join labels l on pl.label_id = l.id
             left join writers w on w.id = p.writer_id
@@ -46,6 +44,8 @@ public class JdbcPostRepositoryImpl implements PostRepository {
 
     @Override
     public Post getById(Long id) {
+
+        Post result = null;
 
         try (PreparedStatement preparedStatement = JdbcUtils.getPreparedStatement(GET_POST_bY_ID_SQL)) {
             preparedStatement.setLong(1, id);
@@ -66,39 +66,41 @@ public class JdbcPostRepositoryImpl implements PostRepository {
                 writer.setLastName(resultSet.getString(8));
 
 
-                while (resultSet.next()) {
+                if (Objects.nonNull(resultSet.getLong(9))) {
                     Label label = new Label();
                     label.setId(resultSet.getLong(9));
                     label.setName(resultSet.getString(10));
+                    label.setLabelStatus(LabelStatus.valueOf(resultSet.getString(11)));
 
                     labels.add(label);
                 }
 
-                return Post.builder()
-                        .id(postId)
-                        .content(content)
-                        .created(created)
-                        .updated(updated)
-                        .writer(writer)
-                        .labels(labels)
-                        .build();
 
+                result = new Post();
+                result.setId(postId);
+                result.setContent(content);
+                result.setCreated(created);
+                result.setUpdated(updated);
+                result.setPostStatus(postStatus);
+                result.setWriter(writer);
             }
-
+            result.setLabels(labels);
         } catch (SQLException e) {
-            return null;
+            return result;
         }
 
-        return null;
+        return result;
     }
 
     @SneakyThrows
     @Override
     public List<Post> getAll() {
+
         List<Post> posts = new ArrayList<>();
+
+        Map<Long, List<Label>> postIdLabelsListMap = new HashMap<>();
         try (PreparedStatement preparedStatement = JdbcUtils.getPreparedStatement(SELECT_ALL_SQL)) {
             ResultSet resultSet = preparedStatement.executeQuery();
-            List<Label> labels = new ArrayList<>();
             {
                 while (resultSet.next()) {
 
@@ -114,26 +116,43 @@ public class JdbcPostRepositoryImpl implements PostRepository {
                     writer.setLastName(resultSet.getString(8));
 
 
-                    Label label = new Label();
-                    label.setId(resultSet.getLong(9));
-                    label.setName(resultSet.getString(10));
+                    if (Objects.nonNull(resultSet.getString(10))) {
+                        Label label = new Label();
+                        label.setId(resultSet.getLong(9));
+                        label.setName(resultSet.getString(10));
+                        label.setLabelStatus(LabelStatus.valueOf(resultSet.getString(11)));
 
+                        if (!postIdLabelsListMap.containsKey(postId)) {
+                            List<Label> currentLabelsList = new ArrayList<>();
+                            postIdLabelsListMap.put(postId, currentLabelsList);
+                        }
 
-                    labels.add(label);
+                        postIdLabelsListMap.get(postId).add(label);
+                    }
 
-                    return Collections.singletonList(Post.builder()
-                            .id(postId)
-                            .content(content)
-                            .created(created)
-                            .updated(updated)
-                            .writer(writer)
-                            .labels(labels)
-                            .build());
+                    if (posts.stream().noneMatch(p -> p.getId().equals(postId))) {
+                        posts.add(Post.builder()
+                                .id(postId)
+                                .content(content)
+                                .created(created)
+                                .updated(updated)
+                                .postStatus(postStatus)
+                                .writer(writer)
+                                .build());
 
+                    }
                 }
             }
         }
 
+        //TODO: добавить каждому посту его лейблы из нашей мапы
+
+        posts.forEach(post -> {
+            List<Label> labels = postIdLabelsListMap.get(post.getId());
+            if (Objects.nonNull(labels)) {
+                post.setLabels(labels);
+            }
+        });
 
         return posts;
     }
@@ -151,7 +170,6 @@ public class JdbcPostRepositoryImpl implements PostRepository {
             preparedStatement.setLong(5, post.getWriter().getId());
 
 
-
             preparedStatement.executeUpdate();
 
             ResultSet generatedKeys = preparedStatement.getGeneratedKeys();
@@ -163,7 +181,6 @@ public class JdbcPostRepositoryImpl implements PostRepository {
             if (post.getLabels() != null && !post.getLabels().isEmpty()) {
                 addLabelToPost(post.getId(), post.getLabels());
             }
-            addLabelToPost(post.getId(), post.getLabels());
 
         }
 

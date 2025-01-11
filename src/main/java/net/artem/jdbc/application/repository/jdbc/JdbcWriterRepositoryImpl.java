@@ -15,23 +15,20 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 public class JdbcWriterRepositoryImpl implements WriterRepository {
 
     private static final String GET_WRITER_BY_ID_SQL = "SELECT * FROM writers WHERE id = ?";
     private static final String SELECT_ALL_SQL = "SELECT * FROM writers";
-    private static final String INSERT_SQL = "INSERT INTO writers (firstname, lastname, writer_status) VALUES (?, ?, ?)";
+    private static final String INSERT_SQL = "INSERT INTO writers (firstname, lastname, writer_status) VALUES ( ?, ?,?)";
     private static final String UPDATE_SQL = "UPDATE writers SET firstname = ?, lastname = ?, writer_status = ? WHERE id = ?";
     private static final String DELETE_BY_ID_SQL = "UPDATE writers SET writer_status = ? WHERE id = ?";
 
     @SneakyThrows
     @Override
     public Writer getById(Long id) {
-
-        List<Writer> writers = new ArrayList<>();
-
-
         try (PreparedStatement preparedStatement = JdbcUtils.getPreparedStatement(GET_WRITER_BY_ID_SQL)) {
             preparedStatement.setLong(1, id);
             ResultSet resultSet = preparedStatement.executeQuery();
@@ -41,20 +38,6 @@ public class JdbcWriterRepositoryImpl implements WriterRepository {
                 Long writerId = resultSet.getLong(1);
                 String firstName = resultSet.getString(2);
                 String lastName = resultSet.getString(3);
-
-//                while (resultSet.next()) {
-//                    Post post = new Post();
-//                    post.setId(resultSet.getLong(1));
-//                    post.setContent(resultSet.getString(2));
-//                    post.setCreated(resultSet.getDate(3));
-//                    post.setUpdated(resultSet.getDate(4));
-//                    post.setWriter(null);
-//                    post.setPostStatus(PostStatus.valueOf(resultSet.getString(6)));
-//                    posts.add(post);
-//
-//                }
-
-
                 WriterStatus writerStatus = WriterStatus.valueOf(resultSet.getString(4));
 
                 return Writer.builder()
@@ -122,6 +105,38 @@ public class JdbcWriterRepositoryImpl implements WriterRepository {
     }
 
     @SneakyThrows
+    public List<Post> getPostsForWriter(Long writerId) {
+        String sql = "SELECT * FROM posts WHERE writer_id = ?";
+
+        List<Post> posts = new ArrayList<>();
+
+        try (PreparedStatement preparedStatement = JdbcUtils.getPreparedStatement(sql)) {
+            preparedStatement.setLong(1, writerId);
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                Long id = resultSet.getLong(1);
+                String content = resultSet.getString(2);
+                Date created = resultSet.getDate(3);
+                Date updated = resultSet.getDate(4);
+                Long idW = resultSet.getLong(5);
+                PostStatus postStatus = PostStatus.valueOf(resultSet.getString(6));
+
+                posts.add(Post.builder()
+                        .id(id)
+                        .content(content)
+                        .created(created)
+                        .updated(updated)
+                        .id(idW)
+                        .postStatus(postStatus)
+                        .build());
+            }
+        }
+        System.out.println(posts);
+        return posts;
+    }
+
+    @SneakyThrows
     @Override
     public Writer update(Writer updateWriter) {
         try (PreparedStatement preparedStatement = JdbcUtils.getPreparedStatement(UPDATE_SQL)) {
@@ -155,5 +170,6 @@ public class JdbcWriterRepositoryImpl implements WriterRepository {
         }
 
     }
+
 
 }

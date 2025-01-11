@@ -26,14 +26,16 @@
 
 INSERT INTO writers (firstname, lastname, writer_status) VALUES ('leonid ',' Guschin ', 'ACTIVE')
 delete   from posts where id = 3
-select *  from  posts]]></console>
+SELECT * FROM posts WHERE writer_id =1]]></console>
     </connection>
   </component>
   <component name="DBNavigator.Project.DatabaseEditorStateManager">
     <last-used-providers />
   </component>
   <component name="DBNavigator.Project.DatabaseFileManager">
-    <open-files />
+    <open-files>
+      <object connection-id="8b803d9a-e469-4f24-ad0d-2f591f480e6a" object-ref="consoles/Connection 1" />
+    </open-files>
   </component>
   <component name="DBNavigator.Project.DatabaseSessionManager">
     <connection id="8b803d9a-e469-4f24-ad0d-2f591f480e6a" />

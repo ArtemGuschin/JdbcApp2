@@ -14,7 +14,7 @@ import java.util.*;
 
 public class PostView {
     private final Scanner SCANNER = new Scanner(System.in);
-    private PostService postService = new PostService();
+    private final PostService postService = new PostService();
     private final PostController postController = new PostController();
     private final LabelController labelController = new LabelController();
     private final WriterService writerService = new WriterService();
@@ -24,40 +24,21 @@ public class PostView {
         System.out.println("Enter post content ");
         String content = SCANNER.nextLine();
         PostStatus postStatus = PostStatus.ACTIVE;
-        System.out.println("Enter label id ");
+        System.out.println("Enter writer id ");
         Long id = SCANNER.nextLong();
         Writer writer = writerService.getWriterById(id);
 
-        Post createdPost = postController.createPost(content,  id);
+        List<Label> labels = labelController.getAll();
+        System.out.println(labels);
+
+        List<Label> selectedLabels = fulfillsLabels();
+
+
+        Post createdPost = postController.createPost(content, writer, selectedLabels);
         System.out.println("Created post " + createdPost);
 
     }
-//private void createPost() {
-//    Writer writer = chooseWriter();
-//
-//    if (writer != null) {
-//        System.out.println("Введите содержание поста: ");
-//        String content = SCANNER.nextLine();
-//
-//      List<Post> labels = postService.getAll();
-//
-//        for (Post label : labels) {
-//            labelController.createLabel(String.valueOf(label));
-//        }
-//
-//        Post post = Post.builder()
-//                .content(content)
-//                .created(new Date())
-//                .updated(new Date())
-//                .postStatus(PostStatus.ACTIVE)
-//                .writer(writer)
-//                .labels(labels)
-//                .build();
-//
-//        postController.createPost(post);
-//        System.out.println("Пост сохранен.");
-//    }
-//}
+
 
     private List<Label> fulfillsLabels() {
         List<Label> result = new ArrayList<>();
