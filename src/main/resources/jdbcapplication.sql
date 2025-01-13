@@ -48,4 +48,13 @@ SELECT p.id, p.content, p.created, p.updated, p.post_status,
             left join post_labels pl on p.id = pl.post_id left join labels l on pl.label_id = l.id
             left join writers w on w.id = p.writer_id
 
-select *from writers
+
+CREATE TABLE IF NOT EXISTS writer_posts (
+    writer_id BIGINT,
+    post_id BIGINT,
+    PRIMARY KEY (writer_id, post_id),
+    FOREIGN KEY (writer_id) REFERENCES writers(id) ON DELETE CASCADE,
+    FOREIGN KEY (post_id) REFERENCES posts(id) ON DELETE CASCADE
+);
+select * from writer_posts
+

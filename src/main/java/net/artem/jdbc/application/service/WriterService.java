@@ -34,6 +34,6 @@ public class WriterService {
         return writerRepository.getAll();
     }
     public Writer getWriterById(Long id){
-        return writerRepository.getById(id);
+         return writerRepository.getById(id);
     }
 }

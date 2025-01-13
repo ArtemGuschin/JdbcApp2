@@ -27,9 +27,9 @@ public class PostView {
         System.out.println("Enter writer id ");
         Long id = SCANNER.nextLong();
         Writer writer = writerService.getWriterById(id);
-
+        System.out.println("Enter id label to add your post");
         List<Label> labels = labelController.getAll();
-        System.out.println(labels);
+//        System.out.println(labels);
 
         List<Label> selectedLabels = fulfillsLabels();
 
@@ -44,7 +44,7 @@ public class PostView {
         List<Label> result = new ArrayList<>();
         List<Label> allLabels = labelController.getAll();
         while (true) {
-            System.out.println("Enter label id (-1 To complete ) ");
+            System.out.println(" (-1 To complete ) ");
             System.out.println(allLabels);
 
             Long choice = SCANNER.nextLong();

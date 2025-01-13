@@ -33,7 +33,7 @@ public class WriterView {
         List<Post>posts = postController.getAll();
         WriterStatus writerStatus = WriterStatus.UNDER_REVIEW;
         Writer createdWriter = writerController.createWriter(firstname,lastname,posts,writerStatus);
-        System.out.println("Writer updated ");
+        System.out.println("Writer created ");
 
 
     }

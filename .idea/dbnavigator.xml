@@ -18,24 +18,22 @@
   <component name="DBNavigator.Project.DatabaseConsoleManager">
     <connection id="8b803d9a-e469-4f24-ad0d-2f591f480e6a">
       <console name="Connection" type="STANDARD" schema="" session="Main" />
-      <console name="Connection 1" type="STANDARD" schema="jdbcapplication" session="Main"><![CDATA[SELECT p.id, p.content, p.created, p.updated, p.post_status,
-            w.id as writer_id, w.firstname, w.lastname, l.id , l.name 
-            from posts p
-            left join post_labels pl on p.id = pl.post_id left join labels l on pl.label_id = l.id
-            left join writers w on w.id = p.writer_id = 3
+      <console name="Connection 1" type="STANDARD" schema="jdbcapplication" session="Main"><![CDATA[select *from writers w left join posts p on w.id=p.id WHERE w.id = 3
 
-INSERT INTO writers (firstname, lastname, writer_status) VALUES ('leonid ',' Guschin ', 'ACTIVE')
-delete   from posts where id = 3
-SELECT * FROM posts WHERE writer_id =1]]></console>
+SELECT * FROM writers
+
+select *from writers w   left join posts p on w.id=p.id
+
+INSERT INTO writer_posts (writer_id, post_id) VALUES (2, 2)
+select * from writers
+select *from writers w left join posts p on w.id=p.id]]></console>
     </connection>
   </component>
   <component name="DBNavigator.Project.DatabaseEditorStateManager">
     <last-used-providers />
   </component>
   <component name="DBNavigator.Project.DatabaseFileManager">
-    <open-files>
-      <object connection-id="8b803d9a-e469-4f24-ad0d-2f591f480e6a" object-ref="consoles/Connection 1" />
-    </open-files>
+    <open-files />
   </component>
   <component name="DBNavigator.Project.DatabaseSessionManager">
     <connection id="8b803d9a-e469-4f24-ad0d-2f591f480e6a" />

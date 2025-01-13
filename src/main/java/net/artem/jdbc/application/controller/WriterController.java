@@ -5,6 +5,7 @@ import net.artem.jdbc.application.model.Post;
 import net.artem.jdbc.application.model.Writer;
 import net.artem.jdbc.application.service.WriterService;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class WriterController {
