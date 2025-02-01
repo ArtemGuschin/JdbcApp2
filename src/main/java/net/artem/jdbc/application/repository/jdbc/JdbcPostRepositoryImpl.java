@@ -145,7 +145,7 @@ public class JdbcPostRepositoryImpl implements PostRepository {
             }
         }
 
-        //TODO: добавить каждому посту его лейблы из нашей мапы
+
 
         posts.forEach(post -> {
             List<Label> labels = postIdLabelsListMap.get(post.getId());
