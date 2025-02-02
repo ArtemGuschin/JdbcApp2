@@ -1,7 +1,7 @@
 package net.artem.jdbc.application;
 
 
-import net.artem.jdbc.application.repository.jdbc.JdbcWriterRepositoryImpl;
+
 import net.artem.jdbc.application.view.MainView;
 
 public class
